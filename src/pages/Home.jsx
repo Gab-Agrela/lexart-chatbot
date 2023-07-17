@@ -55,8 +55,10 @@ const Chatbot = () => {
   };
 
   const initialMessage = (messageText) => {
-    const initialMessageArray = ["Hello,", "Goodbye,", "Good,", "I want"];
-    if (initialMessageArray.some((str) => messageText.includes(str))) {
+    const initialMessageArray = ["hello", "goodbye", "good", "i want"];
+    if (
+      initialMessageArray.some((str) => messageText.toLowerCase().includes(str))
+    ) {
       setIsStarted(true);
       const firstMessage = {
         type: "bot",
@@ -67,9 +69,9 @@ const Chatbot = () => {
     }
   };
 
-  const authenticateUser = (inputValue) => {
-    if (inputValue.split(" ").length === 2) {
-      const [username, password] = inputValue.split(" ");
+  const authenticateUser = (messageText) => {
+    if (messageText.trim().split(" ").length === 2) {
+      const [username, password] = messageText.trim().split(" ");
       if (username && password) {
         setIsAuthenticated(true);
         setUser(username);
@@ -107,10 +109,28 @@ const Chatbot = () => {
     return setMessages((prevState) => [...prevState, loanMessage]);
   };
 
+  const goodbyeMessage = (messageText) => {
+    if (messageText.includes("goodbye")) {
+      const firstMessage = {
+        type: "bot",
+        text: `<span>Thank you for using our services! 
+        If you have any more questions in the future, feel free to ask. 
+        Goodbye and have a great day!</span><br>
+        <span>Click here to download the chat history in CSV format`,
+        dateTime: new Date().toISOString(),
+      };
+      return setMessages((prevState) => [...prevState, firstMessage]);
+    }
+  };
+
   const handleMessageSubmit = (e) => {
     e.preventDefault();
     const messageText = e.target.message.value;
-    const newMessage = { type: "user", text: messageText };
+    const newMessage = {
+      type: "user",
+      text: messageText,
+      dateTime: new Date().toISOString(),
+    };
     setMessages([...messages, newMessage]);
     if (!isAuthenticated && !isStarted) {
       initialMessage(messageText);
@@ -120,6 +140,9 @@ const Chatbot = () => {
     }
     if (messageText === "loan" && isAuthenticated) {
       showLoanOptions();
+    }
+    if (messageText.toLowerCase().includes("goodbye") && isStarted) {
+      goodbyeMessage(messageText);
     }
     setInputValue("");
   };
