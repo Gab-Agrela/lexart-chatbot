@@ -9,6 +9,7 @@ import {
   showLoanOptions,
 } from "../utils/functions";
 import { getLocalStorage, setLocalStorage } from "../utils/localStorageHelpers";
+import { exportToCsv } from "../utils/exportCsv";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -16,6 +17,7 @@ const Chatbot = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [, setUser] = useState("");
+  const [showDownloadButton, setShowDownloadButton] = useState(false);
 
   const messagesContainerRef = useRef(null);
 
@@ -32,6 +34,11 @@ const Chatbot = () => {
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
+  };
+
+  const handleExportClick = () => {
+    exportToCsv(messages, "chatbot_messages.csv");
+    setShowDownloadButton(false);
   };
 
   const handleMessageSubmit = (e) => {
@@ -54,7 +61,7 @@ const Chatbot = () => {
       showLoanOptions(setMessages);
     }
     if (messageText.toLowerCase().includes("goodbye") && isStarted) {
-      goodbyeMessage(messageText, setMessages);
+      goodbyeMessage(messageText, setMessages, setShowDownloadButton);
     }
     setInputValue("");
   };
@@ -84,9 +91,15 @@ const Chatbot = () => {
           onChange={handleInputChange}
           autoComplete="off"
         />
-        <SendButton type="submit" disabled={!inputValue}>
-          Send
-        </SendButton>
+        {showDownloadButton ? (
+          <DownloadButton type="submit" onClick={handleExportClick}>
+            Dowload
+          </DownloadButton>
+        ) : (
+          <SendButton type="submit" disabled={!inputValue}>
+            Send
+          </SendButton>
+        )}
       </InputContainer>
     </ChatbotContainer>
   );
@@ -178,6 +191,26 @@ const SendButton = styled.button`
 
   &:hover {
     background-color: #2962ff;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const DownloadButton = styled.button`
+  padding: 8px 16px;
+  background-color: #8b4deb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: "SF Pro Text", "Arial", sans-serif;
+
+  &:hover {
+    background-color: #7f48d3;
   }
 
   &:disabled {

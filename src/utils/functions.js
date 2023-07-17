@@ -95,7 +95,11 @@ export const loanHandleClick = (e, setMessages) => {
   }
 };
 
-export const goodbyeMessage = (messageText, setMessages) => {
+export const goodbyeMessage = (
+  messageText,
+  setMessages,
+  setShowDownloadButton
+) => {
   if (messageText.includes("goodbye")) {
     const firstMessage = {
       type: "bot",
@@ -106,6 +110,7 @@ export const goodbyeMessage = (messageText, setMessages) => {
       dateTime: new Date().toISOString(),
     };
     setLocalStorage(firstMessage);
+    setShowDownloadButton(true);
     return setMessages((prevState) => [...prevState, firstMessage]);
   }
 };
