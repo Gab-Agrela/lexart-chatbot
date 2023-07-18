@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { exportToCsv } from "../utils/exportCsv";
+
 import {
   authenticateUser,
   dontUnderstand,
@@ -8,7 +8,11 @@ import {
   initialMessage,
   loanOptions,
 } from "../utils/botMessagesConstructor";
-import { setLocalStorage } from "../utils/localStorageFunctions";
+import {
+  getLocalStorage,
+  setLocalStorage,
+} from "../utils/localStorageFunctions";
+import { textMessages } from "../utils/botMessages";
 
 export const FormContainer = ({ messages, setMessages }) => {
   const [inputValue, setInputValue] = useState("");
@@ -16,15 +20,24 @@ export const FormContainer = ({ messages, setMessages }) => {
   const [chatStarted, setChatStarted] = useState(false);
   const [, setUser] = useState("");
 
-  const [showDownloadButton, setShowDownloadButton] = useState(false);
+  useEffect(() => {
+    const chatLog = getLocalStorage("chat");
+    if (chatLog) {
+      const hasStarted = chatLog.filter(
+        (message) => message.text === textMessages["requireCredentials"]
+      );
+      if (hasStarted) {
+        setChatStarted(true);
+      }
+    }
+    const user = getLocalStorage("user");
+    if (user) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
-  };
-
-  const handleExportClick = () => {
-    exportToCsv(messages, "chatbot_messages.csv");
-    setShowDownloadButton(false);
   };
 
   const handleMessageSubmit = (e) => {
@@ -39,28 +52,30 @@ export const FormContainer = ({ messages, setMessages }) => {
     setMessages([...messages, newMessage]);
 
     if (!isAuthenticated && !chatStarted) {
-      setInputValue("");
-      return initialMessage(messageText, setChatStarted, setMessages);
+      return initialMessage(
+        messageText,
+        setChatStarted,
+        setMessages,
+        setInputValue
+      );
     }
     if (!isAuthenticated && chatStarted) {
-      setInputValue("");
       return authenticateUser(
         messageText,
         setIsAuthenticated,
         setUser,
-        setMessages
+        setMessages,
+        setInputValue
       );
     }
     if (messageText.toLowerCase() === "loan" && isAuthenticated) {
-      setInputValue("");
-      return loanOptions(setMessages);
+      return loanOptions(setMessages, setInputValue);
     }
     if (messageText.toLowerCase().includes("goodbye") && chatStarted) {
-      setInputValue("");
-      return goodbyeMessage(messageText, setMessages, setShowDownloadButton);
+      return goodbyeMessage(messageText, setMessages, setInputValue);
     }
-    setInputValue("");
-    return dontUnderstand(messages, setMessages);
+
+    return dontUnderstand(messages, setMessages, setInputValue);
   };
 
   return (
@@ -73,15 +88,10 @@ export const FormContainer = ({ messages, setMessages }) => {
         onChange={handleInputChange}
         autoComplete="off"
       />
-      {showDownloadButton ? (
-        <DownloadButton type="submit" onClick={handleExportClick}>
-          Dowload
-        </DownloadButton>
-      ) : (
-        <SendButton type="submit" disabled={!inputValue}>
-          Send
-        </SendButton>
-      )}
+
+      <SendButton type="submit" disabled={!inputValue}>
+        Send
+      </SendButton>
     </Container>
   );
 };
@@ -112,26 +122,6 @@ const SendButton = styled.button`
 
   &:hover {
     background-color: #2962ff;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
-const DownloadButton = styled.button`
-  padding: 8px 16px;
-  background-color: #8b4deb;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-family: "SF Pro Text", "Arial", sans-serif;
-
-  &:hover {
-    background-color: #7f48d3;
   }
 
   &:disabled {

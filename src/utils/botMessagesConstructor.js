@@ -2,7 +2,12 @@ import { htmlMessages, textMessages } from "./botMessages";
 import { setLocalStorage, setUserLocalStorage } from "./localStorageFunctions";
 import { validateFields } from "./userFunctions";
 
-export const initialMessage = (messageText, setIsStarted, setMessages) => {
+export const initialMessage = (
+  messageText,
+  setIsStarted,
+  setMessages,
+  setInputValue
+) => {
   const initialMessageArray = ["hello", "goodbye", "good", "i want"];
   if (
     initialMessageArray.some((str) => messageText.toLowerCase().includes(str))
@@ -14,6 +19,7 @@ export const initialMessage = (messageText, setIsStarted, setMessages) => {
       dateTime: new Date().toISOString(),
     };
     setLocalStorage(firstMessage);
+    setInputValue("");
     return setMessages((prevState) => [...prevState, firstMessage]);
   } else {
     const firstMessage = {
@@ -22,6 +28,7 @@ export const initialMessage = (messageText, setIsStarted, setMessages) => {
       dateTime: new Date().toISOString(),
     };
     setLocalStorage(firstMessage);
+    setInputValue("");
     return setMessages((prevState) => [...prevState, firstMessage]);
   }
 };
@@ -30,21 +37,25 @@ export const authenticateUser = (
   messageText,
   setIsAuthenticated,
   setUser,
-  setMessages
+  setMessages,
+  setInputValue
 ) => {
   if (messageText.trim().split(" ").length === 2) {
     const [username, password] = messageText.trim().split(" ");
-    const verifyFields = validateFields(username, password)
+    const verifyFields = validateFields(username, password);
 
     if (verifyFields) {
       const wrongUsernameOrPassword = {
         type: "bot",
         text: verifyFields,
         dateTime: new Date().toISOString(),
-      }
+      };
       setLocalStorage(wrongUsernameOrPassword);
-      return setMessages((prevState) => [...prevState, wrongUsernameOrPassword]);
-
+      setInputValue("");
+      return setMessages((prevState) => [
+        ...prevState,
+        wrongUsernameOrPassword,
+      ]);
     } else {
       setIsAuthenticated(true);
       setUser(username);
@@ -55,6 +66,7 @@ export const authenticateUser = (
         dateTime: new Date().toISOString(),
       };
       setLocalStorage(welcomeMessage);
+      setInputValue("");
       return setMessages((prevState) => [...prevState, welcomeMessage]);
     }
   } else {
@@ -64,11 +76,12 @@ export const authenticateUser = (
       dateTime: new Date().toISOString(),
     };
     setLocalStorage(wrongFormat);
+    setInputValue("");
     return setMessages((prevState) => [...prevState, wrongFormat]);
   }
 };
 
-export const loanOptions = (setMessages) => {
+export const loanOptions = (setMessages, setInputValue) => {
   const loanMessage = {
     type: "bot",
     text: textMessages["loanOptions"],
@@ -76,6 +89,7 @@ export const loanOptions = (setMessages) => {
     dateTime: new Date().toISOString(),
   };
   setLocalStorage(loanMessage);
+  setInputValue("");
   return setMessages((prevState) => [...prevState, loanMessage]);
 };
 
@@ -99,8 +113,9 @@ export const loanOptionDetails = (e, setMessages) => {
         type: "bot",
         text: textMessages["endChat"],
         dateTime: new Date().toISOString(),
-      }];
-    setLocalStorage(loanCustomMessage);
+      },
+    ];
+    setLocalStorage(...loanCustomMessage);
     return setMessages((prevState) => [...prevState, ...loanCustomMessage]);
   }
 };
@@ -108,7 +123,8 @@ export const loanOptionDetails = (e, setMessages) => {
 export const goodbyeMessage = (
   messageText,
   setMessages,
-  setShowDownloadButton
+  setShowDownloadButton,
+  setInputValue
 ) => {
   if (messageText.includes("goodbye")) {
     const firstMessage = {
@@ -119,11 +135,12 @@ export const goodbyeMessage = (
     };
     setLocalStorage(firstMessage);
     setShowDownloadButton(true);
+    setInputValue("");
     return setMessages((prevState) => [...prevState, firstMessage]);
   }
 };
 
-export const dontUnderstand = (messages, setMessages) => {
+export const dontUnderstand = (messages, setMessages, setInputValue) => {
   const dontUnderstandMessage = [
     {
       type: "bot",
@@ -133,9 +150,11 @@ export const dontUnderstand = (messages, setMessages) => {
     {
       type: "bot",
       text: messages[messages.length - 1].text,
-      html: messages[messages.length - 1].html || '',
+      html: messages[messages.length - 1].html || "",
       dateTime: new Date().toISOString(),
-    }];
-  setLocalStorage(dontUnderstandMessage);
+    },
+  ];
+  setLocalStorage(...dontUnderstandMessage);
+  setInputValue("");
   return setMessages((prevState) => [...prevState, ...dontUnderstandMessage]);
-}
+};
