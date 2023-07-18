@@ -5,6 +5,10 @@ export const setLocalStorage = (message) => {
   localStorage.setItem("chat", chatStrigified);
 };
 
+export const setUserLocalStorage = (username) => {
+  localStorage.setItem("user", username);
+}
+
 export const getLocalStorage = (key) => {
   const content = localStorage.getItem(key);
   if (content) {

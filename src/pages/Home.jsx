@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getLocalStorage } from "../utils/localStorageHelpers";
-import { Messages } from "../components/Messages";
-import { Form } from "../components/Form";
+import { getLocalStorage } from "../utils/localStorageFunctions";
+import { MessagesContainer } from "../components/MessagesContainer";
+import { FormContainer } from "../components/FormContainer";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -16,8 +16,8 @@ const Chatbot = () => {
 
   return (
     <ChatbotContainer>
-      <Messages messages={messages} setMessages={setMessages} />
-      <Form messages={messages} setMessages={setMessages} />
+      <MessagesContainer messages={messages} setMessages={setMessages} />
+      <FormContainer messages={messages} setMessages={setMessages} />
     </ChatbotContainer>
   );
 };

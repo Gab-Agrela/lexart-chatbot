@@ -3,16 +3,17 @@ import styled from "styled-components";
 import { exportToCsv } from "../utils/exportCsv";
 import {
   authenticateUser,
+  dontUnderstand,
   goodbyeMessage,
   initialMessage,
-  showLoanOptions,
-} from "../utils/functions";
-import { setLocalStorage } from "../utils/localStorageHelpers";
+  loanOptions,
+} from "../utils/botMessagesConstructor";
+import { setLocalStorage } from "../utils/localStorageFunctions";
 
-export const Form = ({ messages, setMessages }) => {
+export const FormContainer = ({ messages, setMessages }) => {
   const [inputValue, setInputValue] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
+  const [chatStarted, setChatStarted] = useState(false);
   const [, setUser] = useState("");
 
   const [showDownloadButton, setShowDownloadButton] = useState(false);
@@ -36,23 +37,34 @@ export const Form = ({ messages, setMessages }) => {
     };
     setLocalStorage(newMessage);
     setMessages([...messages, newMessage]);
-    if (!isAuthenticated && !isStarted) {
-      initialMessage(messageText, setIsStarted, setMessages);
+
+    if (!isAuthenticated && !chatStarted) {
+      setInputValue("");
+      return initialMessage(messageText, setChatStarted, setMessages);
     }
-    if (!isAuthenticated && isStarted) {
-      authenticateUser(messageText, setIsAuthenticated, setUser, setMessages);
+    if (!isAuthenticated && chatStarted) {
+      setInputValue("");
+      return authenticateUser(
+        messageText,
+        setIsAuthenticated,
+        setUser,
+        setMessages
+      );
     }
-    if (messageText === "loan" && isAuthenticated) {
-      showLoanOptions(setMessages);
+    if (messageText.toLowerCase() === "loan" && isAuthenticated) {
+      setInputValue("");
+      return loanOptions(setMessages);
     }
-    if (messageText.toLowerCase().includes("goodbye") && isStarted) {
-      goodbyeMessage(messageText, setMessages, setShowDownloadButton);
+    if (messageText.toLowerCase().includes("goodbye") && chatStarted) {
+      setInputValue("");
+      return goodbyeMessage(messageText, setMessages, setShowDownloadButton);
     }
     setInputValue("");
+    return dontUnderstand(messages, setMessages);
   };
 
   return (
-    <FormContainer onSubmit={handleMessageSubmit}>
+    <Container onSubmit={handleMessageSubmit}>
       <TextInput
         type="text"
         name="message"
@@ -70,11 +82,11 @@ export const Form = ({ messages, setMessages }) => {
           Send
         </SendButton>
       )}
-    </FormContainer>
+    </Container>
   );
 };
 
-const FormContainer = styled.form`
+const Container = styled.form`
   display: flex;
   padding: 10px;
 `;
