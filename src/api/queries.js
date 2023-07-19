@@ -1,7 +1,8 @@
 import axios from "axios";
+require("dotenv/config");
 
-const port = 3001;
-const baseUrl = `http://localhost:${port}/chat`;
+const backUrl = process.env.BACKEND_URL;
+const baseUrl = `${backUrl}/chat`;
 
 export const insertUserChatLog = async (username, chatLog) => {
   try {
