@@ -132,7 +132,7 @@ export const goodbyeMessage = async (
   setMessages,
   setInputValue
 ) => {
-  if (messageText.includes("goodbye")) {
+  if (messageText.toLowerCase().includes("goodbye")) {
     const firstMessage = [
       {
         type: "bot",
