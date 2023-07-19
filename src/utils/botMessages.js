@@ -36,7 +36,7 @@ export const textMessages = {
     "If that's all you need, simply type 'Goodbye' to end the chat. If you want to see the options again, type 'loan'. Thank you!",
   goodbye: `Thank you for using our services! 
   If you have any more questions in the future, feel free to ask. 
-  Goodbye and have a great day! Click in the button to download the chat history in CSV format`,
+  Goodbye and have a great day! Click here to go to chat history page`,
   dontUnderstand: "Sorry, i don't understand.",
   clearChat: "The chat will be cleared in 10 seconds",
 };
@@ -75,5 +75,5 @@ export const htmlMessages = {
   goodbye: `<span>Thank you for using our services! 
   If you have any more questions in the future, feel free to ask. 
   Goodbye and have a great day!</span><br>
-  <span>Click in the button to download the chat history in CSV format`,
+  <span>Click <a href="http://localhost:3000/chatList" target="_blank">here</a> to go to chat history page.</span>`,
 };

@@ -4,15 +4,28 @@ const port = 3001;
 const baseUrl = `http://localhost:${port}/chat`;
 
 export const insertUserChatLog = async (username, chatLog) => {
-  axios
-    .post(`${baseUrl}/insertNewChat`, {
+  try {
+    const response = await axios.post(`${baseUrl}/insertNewChat`, {
       username,
       chatLog,
-    })
-    .then(function (response) {
-      return response;
-    })
-    .catch(function (error) {
-      return error;
     });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const searchUserChatLog = async (username) => {
+  try {
+    const response = await axios.get(`${baseUrl}/searchUserChat`, {
+      params: {
+        username,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

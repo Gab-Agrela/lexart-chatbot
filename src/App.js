@@ -1,11 +1,13 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Chatbot from "./pages/Home";
+import Chatbot from "./pages/ChatBot";
+import { ChatList } from "./pages/ChatList";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Chatbot />}></Route>
+        <Route path="/chatList" element={<ChatList />}></Route>
       </Routes>
     </BrowserRouter>
   );
