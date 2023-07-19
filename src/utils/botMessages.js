@@ -5,8 +5,10 @@ export const textMessages = {
     "Sorry, I don't understand. Type one of each following terms to start the chat: 'Hello', 'I want', 'Good' or 'Goodbye'",
   wrongFormat:
     "Wrong format, enter a username with a minimum of 6 digits and a password with at least 4 digits. Example: username password",
-  usernameInvalid: 'Please, the username must be at least 6 digits. Enter your username and password again. Example: username password',
-  passwordInvalid: 'Please, the password must be at least 4 digits. Enter your username and password again. Example: username password',
+  usernameInvalid:
+    "Please, the username must be at least 6 digits. Enter your username and password again. Example: username password",
+  passwordInvalid:
+    "Please, the password must be at least 4 digits. Enter your username and password again. Example: username password",
   loanOptionsSplitted: {
     a: "a - Do you want to apply for a loan?",
     b: "b - Loan conditions",
@@ -30,11 +32,13 @@ export const textMessages = {
     our friendly customer support team is here to help. 
     Click here to see more informations.`,
   },
-  endChat: "If that's all you need, simply type 'Goodbye' to end the chat. If you want to see the options again, type 'loan'. Thank you!",
+  endChat:
+    "If that's all you need, simply type 'Goodbye' to end the chat. If you want to see the options again, type 'loan'. Thank you!",
   goodbye: `Thank you for using our services! 
   If you have any more questions in the future, feel free to ask. 
   Goodbye and have a great day! Click in the button to download the chat history in CSV format`,
-  dontUnderstand: "Sorry, i don't understand."
+  dontUnderstand: "Sorry, i don't understand.",
+  clearChat: "The chat will be cleared in 10 seconds",
 };
 
 export const htmlMessages = {

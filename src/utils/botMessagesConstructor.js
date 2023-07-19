@@ -1,5 +1,10 @@
+import { insertUserChatLog } from "../api/queries";
 import { htmlMessages, textMessages } from "./botMessages";
-import { setLocalStorage, setUserLocalStorage } from "./localStorageFunctions";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  setUserLocalStorage,
+} from "./localStorageFunctions";
 import { validateFields } from "./userFunctions";
 
 export const initialMessage = (
@@ -33,7 +38,7 @@ export const initialMessage = (
   }
 };
 
-export const authenticateUser = (
+export const authenticateUser = async (
   messageText,
   setIsAuthenticated,
   setUser,
@@ -63,6 +68,7 @@ export const authenticateUser = (
       const welcomeMessage = {
         type: "bot",
         text: `Welcome, ${username}! Type "loan" to see the options.`,
+
         dateTime: new Date().toISOString(),
       };
       setLocalStorage(welcomeMessage);
@@ -73,6 +79,7 @@ export const authenticateUser = (
     const wrongFormat = {
       type: "bot",
       text: textMessages["wrongFormat"],
+
       dateTime: new Date().toISOString(),
     };
     setLocalStorage(wrongFormat);
@@ -120,23 +127,38 @@ export const loanOptionDetails = (e, setMessages) => {
   }
 };
 
-export const goodbyeMessage = (
+export const goodbyeMessage = async (
   messageText,
   setMessages,
-  setShowDownloadButton,
   setInputValue
 ) => {
   if (messageText.includes("goodbye")) {
-    const firstMessage = {
-      type: "bot",
-      text: textMessages["goodbye"],
-      html: htmlMessages["goodbye"],
+    const firstMessage = [
+      {
+        type: "bot",
+        text: textMessages["goodbye"],
+        html: htmlMessages["goodbye"],
+        dateTime: new Date().toISOString(),
+      },
+      {
+        type: "bot",
+        text: textMessages["clearChat"],
+
+        dateTime: new Date().toISOString(),
+      },
+    ];
+    setLocalStorage(...firstMessage);
+    const username = getLocalStorage("user");
+    const mountedChatLogObject = {
       dateTime: new Date().toISOString(),
+      content: getLocalStorage("chat").map(({ type, text, dateTime }) => {
+        return { type, text, dateTime };
+      }),
     };
-    setLocalStorage(firstMessage);
-    setShowDownloadButton(true);
+    await insertUserChatLog(username, mountedChatLogObject);
     setInputValue("");
-    return setMessages((prevState) => [...prevState, firstMessage]);
+
+    return setMessages((prevState) => [...prevState, ...firstMessage]);
   }
 };
 

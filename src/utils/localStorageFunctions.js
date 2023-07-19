@@ -17,3 +17,8 @@ export const getLocalStorage = (key) => {
   }
   return "";
 };
+
+export const clearLocalStorage = () => {
+  localStorage.clear("chat");
+  localStorage.clear("user");
+};

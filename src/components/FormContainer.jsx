@@ -9,6 +9,7 @@ import {
   loanOptions,
 } from "../utils/botMessagesConstructor";
 import {
+  clearLocalStorage,
   getLocalStorage,
   setLocalStorage,
 } from "../utils/localStorageFunctions";
@@ -46,6 +47,7 @@ export const FormContainer = ({ messages, setMessages }) => {
     const newMessage = {
       type: "user",
       text: messageText,
+      html: "",
       dateTime: new Date().toISOString(),
     };
     setLocalStorage(newMessage);
@@ -72,6 +74,12 @@ export const FormContainer = ({ messages, setMessages }) => {
       return loanOptions(setMessages, setInputValue);
     }
     if (messageText.toLowerCase().includes("goodbye") && chatStarted) {
+      setTimeout(() => {
+        clearLocalStorage();
+        setMessages([]);
+        setIsAuthenticated(false);
+        setChatStarted(false);
+      }, 10000);
       return goodbyeMessage(messageText, setMessages, setInputValue);
     }
 
