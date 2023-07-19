@@ -75,5 +75,5 @@ export const htmlMessages = {
   goodbye: `<span>Thank you for using our services! 
   If you have any more questions in the future, feel free to ask. 
   Goodbye and have a great day!</span><br>
-  <span>Click <a href="http://localhost:3000/chatList" target="_blank">here</a> to go to chat history page.</span>`,
+  <span>Click <a href="https://lexart-chatbot.vercel.app/chatList" target="_blank">here</a> to go to chat history page.</span>`,
 };
