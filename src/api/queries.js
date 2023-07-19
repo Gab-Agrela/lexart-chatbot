@@ -1,7 +1,6 @@
 import axios from "axios";
-require("dotenv/config");
 
-const backUrl = process.env.BACKEND_URL;
+const backUrl = process.env.REACT_APP_ENV_BACKEND_URL;
 const baseUrl = `${backUrl}/chat`;
 
 export const insertUserChatLog = async (username, chatLog) => {
