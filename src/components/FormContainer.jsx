@@ -41,7 +41,7 @@ export const FormContainer = ({ messages, setMessages }) => {
     setInputValue(e.target.value);
   };
 
-  const handleMessageSubmit = (e) => {
+  const handleMessageSubmit = async (e) => {
     e.preventDefault();
     const messageText = e.target.message.value;
     const newMessage = {
@@ -74,13 +74,14 @@ export const FormContainer = ({ messages, setMessages }) => {
       return loanOptions(setMessages, setInputValue);
     }
     if (messageText.toLowerCase().includes("goodbye") && chatStarted) {
+      await goodbyeMessage(messageText, setMessages, setInputValue);
       setTimeout(() => {
         clearLocalStorage();
         setMessages([]);
         setIsAuthenticated(false);
         setChatStarted(false);
       }, 10000);
-      return goodbyeMessage(messageText, setMessages, setInputValue);
+      return;
     }
 
     return dontUnderstand(messages, setMessages, setInputValue);

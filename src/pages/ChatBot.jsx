@@ -14,6 +14,12 @@ const Chatbot = () => {
     }
   }, []);
 
+  useEffect(() => {
+    alert(
+      `The backend is currently hosted on Render. Please note that if you don't receive any new messages after ending the conversation typing 'goodbye',it means the backend is still starting up. Please be patient, and the service will be available shortly.`
+    );
+  }, []);
+
   return (
     <Container>
       <ChatbotContainer>

@@ -155,8 +155,8 @@ export const goodbyeMessage = async (
         return { type, text, dateTime };
       }),
     };
-    await insertUserChatLog(username, mountedChatLogObject);
     setInputValue("");
+    await insertUserChatLog(username, mountedChatLogObject);
 
     return setMessages((prevState) => [...prevState, ...firstMessage]);
   }
