@@ -21,7 +21,7 @@ export const ChatList = () => {
   };
 
   return (
-    <Container>
+    <ChatListContainer>
       <Link
         to="/"
         style={{
@@ -50,11 +50,11 @@ export const ChatList = () => {
         </button>
       </form>
       <ChatLinks userData={userData} responseMessage={responseMessage} />
-    </Container>
+    </ChatListContainer>
   );
 };
 
-const Container = styled.div`
+const ChatListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,9 +62,10 @@ const Container = styled.div`
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
+  background-color: #fff;
   border-radius: 5px;
   font-family: "SF Pro Text", "Arial", sans-serif;
-  height: 95vh;
+  height: 100vh;
 
   h2 {
     text-align: center;

@@ -33,7 +33,7 @@ const Container = styled.div`
 
 const ChatbotContainer = styled.div`
   width: 600px;
-  height: 98vh;
+  height: 100vh;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
