@@ -2,13 +2,13 @@
 
 Este é um chatbot desenvolvido para o desafio da Lexart. No front foi utilizado React, e Node.js, Express no backend. Ele permite que os usuários iniciem uma conversa e obtenham informações sobre empréstimos. O chatbot também armazena o histórico das conversas em um banco de dados MongoDB.
 
-##Pré-requisitos
+## Pré-requisitos
 
 Antes de começar, verifique se você possui o seguinte instalado em sua máquina:
 
 - Node.js (https://nodejs.org/)
 
-##Instalação
+## Instalação
 
 Siga as etapas abaixo para configurar o ambiente de desenvolvimento:
 
